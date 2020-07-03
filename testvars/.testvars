@@ -1,0 +1,12 @@
+export TEST_DELPHIX_URL="http://172.16.251.166"
+export TEST_DELPHIX_USERNAME="admin"
+export TEST_DELPHIX_PASSWORD="delphix"
+export DELPHIX_TEST_APPDATA="YES"
+export APP_DATA_SOURCE="APPDATA_CONTAINER-2"
+export APP_DATA_NAME=PVC
+#export APP_DATA_NAME_2=PVC
+export APP_DATA_MOUNT_PATH=/mnt/provision
+export APP_NAMESPACE=default
+export GROUP_NAME=K8S-Volumes
+export ENVIRONMENT_NAME=k8s-master
+export REPO_NAME="Kubernetes kubernetes-admin@kubernetes - v1.18.3"
