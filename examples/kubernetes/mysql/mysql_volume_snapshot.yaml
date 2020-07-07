@@ -1,0 +1,9 @@
+apiVersion: snapshot.storage.k8s.io/v1alpha1
+kind: VolumeSnapshot
+metadata:
+  name: snapshot-mysql-prd-slave-0
+  namespace: production
+spec:
+  source:
+    name: data-mysql-prd-slave-0
+    kind: PersistentVolumeClaim

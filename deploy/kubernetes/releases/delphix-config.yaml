@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  engineUrl: http://172.168.26.9
+  envName: k8s-master
+  groupName: K8S-Volumes
+  mountPath: /mnt/provision
+  repoName: "Kubernetes kubernetes-admin@kubernetes - v1.18.4"
+  sourceRef: APPDATA_CONTAINER-1
+kind: ConfigMap
+metadata:
+  name: delphix-config
+  namespace: kube-system

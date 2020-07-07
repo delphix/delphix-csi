@@ -1,0 +1,131 @@
+{
+    "repositoryDefinition": {
+        "type": "object",
+        "properties": {
+            "name": { 
+                "type": "string",
+                "prettyName": "Repository"
+            },
+            "kubectl": { 
+                "type": "string",
+                "prettyName": "Kubectl Path",
+                "description": "Path for kubectl binary"
+            },
+            "context": { 
+                "type": "string",
+                "prettyName": "Kubectl Context",
+                "description": "Kubectl Context Name (username@cluster)"
+            },
+            "cluster": { 
+                "type": "string",
+                "prettyName": "Kubernetes Cluster",
+                "description": "Kubernetes Cluster Name (as configured in kubeconfig)"
+            },
+            "username": { 
+                "type": "string",
+                "prettyName": "Kubernetes Username",
+                "description": "Username used to authenticate to Kubernetes API"
+            },
+            "apiendpoint": { 
+                "type": "string", 
+                "prettyName": "Kubernetes API Endpoint",
+                "description": "Kubernetes API Endpoint"
+            },
+            "version": { 
+                "type": "string",
+                "prettyName": "Kubernetes Version",
+                "description": "Kubernetes Version"
+             }
+
+        },
+        "nameField": "name",
+        "identityFields": ["context", "apiendpoint"]
+    },
+    "sourceConfigDefinition": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+            "name": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Unique Identifier for Source",
+                "description": "Delphix Unique Identifier for the Source"
+            },
+            "export_path": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Export Path on Delphix Engine",
+                "description": "Export Path on Delphix Engine (DO NOT FILL THIS)"
+            },
+            "persistent_volume": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Kubernetes PV Name",
+                "description": "Kubernetes Persistent Volume Name"
+            },
+            "persistent_volume_claim": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Kubernetes PVC Name",
+                "description": "Kubernetes Persistent Volume Claim Name"
+            }
+        },
+        "nameField": "name",
+        "identityFields": ["name"]
+    },
+    "virtualSourceDefinition": {
+        "type": "object",
+        "additionalProperties" : false,
+        "properties" : {
+            "mount_location": {
+                "type": "string",
+                "format": "unixpath",
+                "prettyName": "Mount Location on Target Host",
+                "description": "Where to mount VDB onto the target host"
+            },
+            "persistent_volume": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Kubernetes PV Name",
+                "description": "Kubernetes Persistent Volume Name"
+            },
+            "persistent_volume_claim": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Kubernetes PVC Name",
+                "description": "Kubernetes Persistent Volume Claim Name"
+            },
+            "namespace": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Kubernetes Namespace",
+                "description": "Kubernetes PV/PVC Namespace"
+            },
+            "create_volume": {
+                "type": "string",
+                "default": "N",
+                "prettyName": "Create PV in Kubernetes",
+                "description": "Create Volume in Kubernetes?"
+            }
+        },
+        "ordering": ["mount_location", "persistent_volume_claim", "persistent_volume"]
+    },
+    "linkedSourceDefinition": {
+        "type": "object",
+        "additionalProperties" : false,
+        "properties" : {}
+    },
+    "snapshotDefinition": {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+            "snapshot_name": {
+                "type": "string",
+                "default": "",
+                "prettyName": "Kubernetes Snapshot Name",
+                "description": "Kubernetes Volume Snapshot Name"
+            }
+        }
+    }
+}

@@ -1,0 +1,160 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create proc sys net bridge
+    become: true
+    become_method: sudo
+    shell: |
+      modprobe br_netfilter
+      sysctl -p
+      mkdir -p /proc/sys/net/bridge
+      touch /proc/sys/net/bridge/bridge-nf-call-iptables
+      echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+  - name: enable ssh password authentication
+    become: true
+    become_method: sudo
+    shell: |
+      sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+      systemctl restart sshd
+
+  - name: Install pre-reqs packages
+    yum:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+      - epel-release
+      - ca-certificates
+      - curl
+
+  - name: Add Docker repo
+    get_url:
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/docer-ce.repo
+
+  - name: Install docker and its dependecies
+    yum:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    notify:
+      - docker status
+
+  - name: Add vagrant user to docker group
+    user:
+      name: vagrant
+      group: docker
+
+  - name: Allow 'docker' group to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%docker'
+      line: '%docker ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+
+  - name: Increase Runtime Directory Size
+    lineinfile:
+      dest: /etc/systemd/logind.conf
+      state: present
+      regexp: '^RuntimeDirectorySize'
+      line: 'RuntimeDirectorySize=100%'
+
+  - name: Increase run tmps
+    lineinfile:
+      dest: /etc/fstab
+      state: present
+      line : 'tmpfs   /run         tmpfs   rw,nodev,nosuid,size=2G          0  0'
+      validate: 'mount -a && echo %s'
+
+  - name: Remove swapfile from /etc/fstab
+    mount:
+      name: "{{ item }}"
+      fstype: swap
+      state: absent
+    with_items:
+      - swap
+      - none
+
+  - name: Disable swap
+    command: swapoff -a
+    when: ansible_swaptotal_mb > 0
+
+  - name: Start Docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: Create user "{{ uusername }}" on docker group
+    user:
+      name: "{{ uusername }}"
+      password: "{{ upassword | password_hash('sha512') }}"
+      groups: docker
+
+  - name: Create toolkit folder
+    become_user: delphix
+    become_method: sudo
+    command: mkdir -p /home/delphix/toolkit
+
+  - name: Adding yum repository for Kubernetes
+    yum_repository:
+      baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+      name: kubernetes
+      description: kubernetes
+      gpgcheck: no
+      state: present
+      file: kubernetes.list
+
+  - name: Install Kubernetes binaries
+    yum:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+        - kubelet
+        - kubeadm
+        - kubectl
+
+  - name: create kubelet file
+    command: touch /etc/default/kubelet && chmod +r /etc/default/kubelet
+
+  - name: Configure node ip
+    lineinfile:
+      path: /etc/default/kubelet
+      line: KUBELET_EXTRA_ARGS=--node-ip={{ node_ip }}
+
+  - name: Restart kubelet
+    service:
+      name: kubelet
+      daemon_reload: yes
+      state: restarted
+
+#  - name: Initialize the Kubernetes cluster using kubeadm
+#    command: kubeadm init --apiserver-advertise-address="172.168.26.10" --apiserver-cert-extra-sans="172.168.26.10" --node-name k8s-master --pod-network-cidr=172.168.0.0/16
+
+  - name: Copy join command to local file
+    copy:
+      src: ./join-command
+      dest: /tmp/join-command.sh
+      mode: '0777'
+
+  - name: Join the node to cluster
+    command: sh /tmp/join-command.sh
+
+  handlers:
+    - name: docker status
+      service: name=docker state=started

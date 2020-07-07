@@ -1,0 +1,5 @@
+/bin
+/driver/bin
+/hack/.vagrant
+/hack/kubernetes-setup/join-command
+/hack/kubernetes-setup/kubeconfig

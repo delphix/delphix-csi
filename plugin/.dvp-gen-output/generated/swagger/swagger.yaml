@@ -1,0 +1,88 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "delphix-csi-plugin"
+paths: {}
+definitions:
+  linkedSourceDefinition:
+    type: "object"
+  sourceConfigDefinition:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      persistent_volume:
+        type: "string"
+        description: "Kubernetes Persistent Volume Name"
+        default: ""
+      persistent_volume_claim:
+        type: "string"
+        description: "Kubernetes Persistent Volume Claim Name"
+        default: ""
+      name:
+        type: "string"
+        description: "Delphix Unique Identifier for the Source"
+        default: ""
+      export_path:
+        type: "string"
+        description: "Export Path on Delphix Engine (DO NOT FILL THIS)"
+        default: ""
+  virtualSourceDefinition:
+    type: "object"
+    properties:
+      mount_location:
+        type: "string"
+        format: "unixpath"
+        description: "Where to mount VDB onto the target host"
+      persistent_volume_claim:
+        type: "string"
+        description: "Kubernetes Persistent Volume Claim Name"
+        default: ""
+      namespace:
+        type: "string"
+        description: "Kubernetes PV/PVC Namespace"
+        default: ""
+      create_volume:
+        type: "string"
+        description: "Create Volume in Kubernetes?"
+        default: "N"
+      persistent_volume:
+        type: "string"
+        description: "Kubernetes Persistent Volume Name"
+        default: ""
+  repositoryDefinition:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "Username used to authenticate to Kubernetes API"
+      kubectl:
+        type: "string"
+        description: "Path for kubectl binary"
+      name:
+        type: "string"
+      apiendpoint:
+        type: "string"
+        description: "Kubernetes API Endpoint"
+      cluster:
+        type: "string"
+        description: "Kubernetes Cluster Name (as configured in kubeconfig)"
+      version:
+        type: "string"
+        description: "Kubernetes Version"
+      context:
+        type: "string"
+        description: "Kubectl Context Name (username@cluster)"
+  snapshotDefinition:
+    type: "object"
+    properties:
+      snapshot_name:
+        type: "string"
+        description: "Kubernetes Volume Snapshot Name"
+        default: ""
+  snapshotParametersDefinition:
+    type: "object"
+    properties:
+      resync:
+        type: "boolean"
