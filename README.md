@@ -119,29 +119,9 @@ helm install --name my-release -f values.yaml ./
 
 ## Next Steps
 
-- [x] Build a Kubernetes Cluster and add Environment to Delphix
-- [x] Add all nodes IP addresses to Environment's NFS Addresses
-- [x] Start building on top of standard ~~NFS~~ HostPath Driver
-- [x] Provision a PersistentVolume with the Driver and point it to a Delphix vFile
-- [x] Deploy sample application
-- [x] Driver mounts the vFile and the mount is propagated to sample app pod
-- [x] Clone volume manually and provision another PV pointing to it
-- [x] Redeploy application mounting the cloned PV
-- [x] Start with the SDK Plugin or go straight to CSI Driver? (Going straight with CSI Driver)
-- [x] Create a Storage Class for Delphix (IP, username, password, what else?)
-- [x] Driver should log in to Delphix with the information stored in the Storage Class
-- [x] Implement Create, Publish and Unplish Volume methods
-- [x] Implement Snapshot
-- [x] Implement Clone
-- [x] Test Snapshot, Clone (the `csc` command doesn't support `sources` yet) ~~and Rollback~~ (not in the CSI Spec!!!!)
-- [x] Build docker image ([dstolf/krakoa:v0.0.1](https://cloud.docker.com/u/dstolf/repository/docker/dstolf/krakoa) )
-- [x] Deploy to a Kubernetes Cluster
-- [ ] ~~Disable root squash~~ (actually not needed, just need proper pod security context)
-- [ ] ~~Implement Rollback~~ (not in the CSI Spec!!!!)
-- [x] Deploy complex databases using operators and our storage class (MySQL Helm Chart)
-- [ ] Stop mounting vFiles on ~~k8s-master~~ bastion (definetely needs change in Delphix, the best a plugin can do is run umount)
-- [x] ~~Figure a way to pass the sharePath to the CSI Driver~~ (work around in virt. plugin)
-- [ ] Driver should dinamically update NFS Addresses when new nodes are added or removed
+- [ ] Driver should create a Delphix Environment on its own
+- [ ] Driver should get empty volume reference on its own
+- [ ] An operator pod should dinamically update NFS Addresses when new nodes are added or removed
 
 ## End Goals
 - [ ] Feature full driver, with shareable volumes
