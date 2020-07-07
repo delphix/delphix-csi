@@ -122,6 +122,7 @@ helm install --name my-release -f values.yaml ./
 - [ ] Driver should create a Delphix Environment on its own
 - [ ] Driver should get empty volume reference on its own
 - [ ] An operator pod should dinamically update NFS Addresses when new nodes are added or removed
+- [ ] Sample Delphix SDK plugin showcasing database migrations to Kubernetes
 
 ## End Goals
 - [ ] Feature full driver, with shareable volumes
