@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: oracle-database-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: de-fs-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oracle-database
+  namespace: default
+  labels:
+    app: oracle-database
+    version: 12.1.0.2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oracle-database
+      version: 12.1.0.2
+  template:
+    metadata:
+      name: oracle-database
+      labels:
+        app: oracle-database
+        version: 12.1.0.2
+    spec:
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      # add your volume mount for your persistent storage here
+      - name: oracle-database-pv
+        persistentVolumeClaim:
+          claimName: oracle-database-pvc
+      containers:
+      - name: oracle-database
+        securityContext:
+          runAsUser: 1001
+          runAsGroup: 1001
+        command:
+        - /home/oracle/setup/dockerInit.sh
+        # image: container-registry.oracle.com/database/enterprise:12.1.0.2
+        image: registry.oracle.com/database/enterprise:12.2.0.1-slim
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: 1Gi
+        ports:
+        - containerPort: 1521
+          hostPort: 1521
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+          - mountPath: /ORCL
+            name: oracle-database-pv
+          # add your persistent storage for DB files here
+        env:
+          - name: DB_SID
+            value: OraDoc
+          - name: DB_PDB
+            value: OraPdb
+          - name: DB_PASSWD
+            value: oracle
+          - name: DB_DOMAIN
+            value: my.domain.com
+          - name: DB_BUNDLE
+            value: basic
+          - name: DB_MEMORY
+            value: 800m
+      imagePullSecrets:
+      - name: regsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oracle-database
+  namespace: default
+spec:
+  selector:
+    app: oracle-database
+    version: 12.1.0.2
+  ports:
+  - protocol: TCP
+    port: 1521
+    targetPort: 1521

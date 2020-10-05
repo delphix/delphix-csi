@@ -34,9 +34,6 @@
       - ca-certificates
       - curl
       - git
-      - container-selinux 
-      - selinux-policy-base
-      - https://rpm.rancher.io/k3s-selinux-0.1.1-rc1.el7.noarch.rpm
 
   - name: Add Docker repo
     get_url:
@@ -109,46 +106,82 @@
       groups: docker
 
   - name: Create toolkit folder
-    file:
-      path: /home/delphix/toolkit
-      state: directory
-      owner: "{{ uusername }}"
-      group: "docker"
+    become_user: delphix
+    become_method: sudo
+    command: mkdir -p /home/delphix/toolkit
 
-  - name: download k3s install script
-    get_url:
-      url: https://get.k3s.io
-      dest: /tmp/install_k3s.sh
-      mode: "0777"
+  - name: Adding yum repository for Kubernetes
+    yum_repository:
+      baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+      name: kubernetes
+      description: kubernetes
+      gpgcheck: no
+      state: present
+      file: kubernetes.list
 
-  - name: run k3s installer
-    command: sh /tmp/install_k3s.sh --node-ip={{ node_ip }} --node-external-ip={{ node_ip }} --cluster-cidr=192.168.0.0/16 --write-kubeconfig-mode 644
-    environment:
-      INSTALL_K3S_NAME: "{{ server_name }}"
-  
+  - name: Install Kubernetes binaries
+    yum: 
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+        - kubelet 
+        - kubeadm 
+        - kubectl
+
+  - name: create kubelet file
+    command: touch /etc/default/kubelet && chmod +r /etc/default/kubelet
+
+  - name: Configure node ip
+    lineinfile:
+      path: /etc/default/kubelet
+      line: KUBELET_EXTRA_ARGS=--node-ip={{ node_ip }}
+
+  - name: Restart kubelet
+    service:
+      name: kubelet
+      daemon_reload: yes
+      state: restarted
+
+  - name: Initialize the Kubernetes cluster using kubeadm
+    command: kubeadm init --apiserver-advertise-address="172.168.26.10" --apiserver-cert-extra-sans="172.168.26.10" --apiserver-bind-port=443 --node-name k8s-master --pod-network-cidr=192.168.0.0/16
+
   - name: Setup kubeconfig for vagrant user
     command: "{{ item }}"
-    become: yes
     with_items:
      - mkdir -p /home/vagrant/.kube
      - mkdir -p /home/delphix/.kube
-     - sed -ie s,https://127.0.0.1:6443,https://{{ node_ip }}:6443,g /etc/rancher/k3s/k3s.yaml
-     - cp -i /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
-     - cp -i /etc/rancher/k3s/k3s.yaml  /home/delphix/.kube/config
+     - cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+     - cp -i /etc/kubernetes/admin.conf /home/delphix/.kube/config
      - chown vagrant:vagrant /home/vagrant/.kube/config
      - chown delphix:docker /home/delphix/.kube/config
 
-  - name: Get join token
-    become: yes
-    command: cat /var/lib/rancher/k3s/server/node-token
-    register: master_token
+  - name: Download calico yaml
+    become: false
+    get_url:
+      url: https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+      dest: /tmp/calico.yaml
+      mode: '0777'
 
-  - name: copy join token to local file
+#  - name: Replace cidr ip range in calico yaml
+#    become: false
+#    command: sed -i 's/192.168/172.168/g' /tmp/calico.yaml
+
+  - name: Install calico pod network
+    become: no
+    command: kubectl apply -f /tmp/calico.yaml
+
+  - name: Generate join command
+    command: kubeadm token create --print-join-command
+    register: join_command
+
+  - name: Copy join command to local file
     delegate_to: localhost
     become: no
     copy:
-      content: "{{ master_token.stdout_lines[0] }}"
-      dest: "./master-token"
+      content: "{{ join_command.stdout_lines[0] }}"
+      dest: "./join-command"
 
   - name: Copy kubeconfig file to local file
     become: no
@@ -156,13 +189,6 @@
       src: /home/vagrant/.kube/config
       dest: "./kubeconfig"
 
-  - name: Start K3S service
-    service:
-      name: "k3s-{{ server_name }}"
-      state: restarted
-      enabled: yes
-
   handlers:
     - name: docker status
       service: name=docker state=started
-

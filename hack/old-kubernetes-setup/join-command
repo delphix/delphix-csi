@@ -1,0 +1,1 @@
+kubeadm join 172.168.26.10:443 --token hqbuws.9t1n3qixtfjn34wx     --discovery-token-ca-cert-hash sha256:59b76fcea51d6c804f5cc69c7d6e61a6410b47e96379d8577559b787d7d37761 

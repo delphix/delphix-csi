@@ -113,10 +113,11 @@ spec:
       serviceAccount: csi-de-controller-sa
       containers:
         - name: csi-provisioner
-          image: dstolf/csi-provisioner:v1.6.0
+          image: delphix/csi-provisioner:v1.6.0
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
+            - "--extra-create-metadata=true"
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
