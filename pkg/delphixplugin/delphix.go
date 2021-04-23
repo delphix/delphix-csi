@@ -199,7 +199,7 @@ func getVolumePath(volID string) string {
 // createVolume create the directory for the Delphix volume.
 // It returns the volume path or err if one occurs.
 
-func createDriverVolume(name, pvcName, namespace, srcRef, timestamp string, cap int64) (*driverVolume, error) {
+func createDriverVolume(name, pvcName, volumeGuid, namespace, srcRef, timestamp string, cap int64) (*driverVolume, error) {
 	var src string
 	fbool := new(bool)
 	*fbool = false
@@ -219,9 +219,15 @@ func createDriverVolume(name, pvcName, namespace, srcRef, timestamp string, cap 
 	}
 
 	delphixObj, err := client.FindCSIAppDataByName(name)
+	// if it's not found by name, try by GUID
+	if (delphixObj == delphix.AppDataContainerStruct{} && volumeGuid != "") {
+		delphixObj, err = client.FindCSIAppDataByGUID(volumeGuid)
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("Failed querying Delphix for Volume: %v", err)
 	}
+
 	if (delphixObj == delphix.AppDataContainerStruct{}) {
 		ref, err := client.ProvisionCSIAppData(name, envRef, repoName, groupRef, src, timestamp, pvcName, name, namespace, mountPath)
 		if (err != nil || ref == delphix.AppDataContainerStruct{}) {
@@ -231,6 +237,8 @@ func createDriverVolume(name, pvcName, namespace, srcRef, timestamp string, cap 
 			return nil, fmt.Errorf("Error creating volume: %v", err)
 		}
 		delphixObj, err = client.FindCSIAppDataByReference(ref.(string))
+	}else if (volumeGuid != "" && volumeGuid != delphixObj.GUID ) {
+		return nil, fmt.Errorf("Error creating volume: %v", err)
 	}
 
 	glog.V(4).Infof("Delphix Volume Created: %v", delphixObj.Reference)
@@ -244,6 +252,7 @@ func createDriverVolume(name, pvcName, namespace, srcRef, timestamp string, cap 
 	appDataSourceConfigReference := appDataSource.(map[string]interface{})["config"].(string)
 	appDataSourceConfig, err := client.FindAppDataCSISourceConfigByReference(appDataSourceConfigReference)
 	exportPath := appDataSourceConfig.Parameters.ExportPath
+	src = delphixObj.ProvisionContainer
 
 	err = os.MkdirAll(path, 0777)
 	if err != nil {
@@ -256,7 +265,7 @@ func createDriverVolume(name, pvcName, namespace, srcRef, timestamp string, cap 
 		VolSize:                cap,
 		VolPath:                path,
 		VolDelphixReference:    delphixReference,
-		SourceDelphixReference: sourceRef,
+		SourceDelphixReference: src,
 		SourceDelphixTimestamp: timestamp,
 		VolDelphixMountPath:    mountPath,
 		VolDelphixExportPath:   exportPath,

@@ -99,6 +99,7 @@ func (cs *controllerServer) CreateVolume(ctx context.Context, req *csi.CreateVol
 
 	sourceRef := ""
 	ssTimestamp := ""
+	volumeGuid := ""
 
 	if req.GetVolumeContentSource() != nil {
 
@@ -116,17 +117,23 @@ func (cs *controllerServer) CreateVolume(ctx context.Context, req *csi.CreateVol
 			sourceRef = dv.Reference
 			ssTimestamp = "LATEST_SNAPSHOT"
 		}
-	} else if _, ok := req.Parameters["sourceReference"]; ok {
-		sourceRef = req.Parameters["sourceReference"]
-		glog.Infof("Cloning from Delphix Object Reference: \"%v\"", sourceRef)
-		if _, ok := req.Parameters["sourceSnapshotReference"]; ok {
-			ssTimestamp = req.Parameters["sourceSnapshotReference"]
-		} else {
-			ssTimestamp = "LATEST_SNAPSHOT"
+	} else {
+			if _, ok := req.Parameters["sourceReference"]; ok {
+			sourceRef = req.Parameters["sourceReference"]
+			glog.Infof("Cloning from Delphix Object Reference: \"%v\"", sourceRef)
+			if _, ok := req.Parameters["sourceSnapshotReference"]; ok {
+				ssTimestamp = req.Parameters["sourceSnapshotReference"]
+			} else {
+				ssTimestamp = "LATEST_SNAPSHOT"
+			}
+
+			if _, ok := req.Parameters["volumeGuid"]; ok {
+				volumeGuid = req.Parameters["volumeGuid"]
+			}
 		}
 	}
 
-	vol, err := createDriverVolume(req.GetName(), pvcName, namespace, sourceRef, ssTimestamp, capacity /* ephemeral */)
+	vol, err := createDriverVolume(req.GetName(), pvcName, volumeGuid, namespace, sourceRef, ssTimestamp, capacity /* ephemeral */)
 	if err != nil {
 		fmt.Printf("ERROR %v \n", err)
 		return nil, status.Errorf(codes.Internal, "failed to create volume %v: %v", req.GetName(), err)

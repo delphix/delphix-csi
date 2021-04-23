@@ -4,8 +4,8 @@ data:
   envName: k8s-master
   groupName: K8S-Volumes
   mountPath: /mnt/provision
-  repoName: "Kubernetes default - v1.18.9+k3s1"
-  sourceRef: APPDATA_CONTAINER-79
+  repoName: "Kubernetes - default - v1.18.9+k3s1"
+  sourceRef: APPDATA_CONTAINER-83
 kind: ConfigMap
 metadata:
   name: delphix-config

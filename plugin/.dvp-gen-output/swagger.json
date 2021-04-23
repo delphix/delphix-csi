@@ -52,8 +52,8 @@
       "additionalProperties": false, 
       "ordering": [
         "mount_location", 
-        "persistent_volume_claim", 
-        "persistent_volume"
+        "namespace", 
+        "persistent_volume_claim"
       ], 
       "type": "object", 
       "properties": {
@@ -74,12 +74,6 @@
           "prettyName": "Kubernetes Namespace", 
           "type": "string", 
           "description": "Kubernetes PV/PVC Namespace"
-        }, 
-        "create_volume": {
-          "default": "N", 
-          "prettyName": "Create PV in Kubernetes", 
-          "type": "string", 
-          "description": "Create Volume in Kubernetes?"
         }, 
         "persistent_volume": {
           "default": "", 

@@ -162,7 +162,7 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: csi-de-plugin
-          image: delphix/delphix-csi:v0.0.1
+          image: delphix/delphix-csi:v0.0.2
           args :
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--password=$(DELPHIX_ACCESS_PASSWORD)"
@@ -472,7 +472,7 @@ spec:
             - name: registration-dir
               mountPath: /registration/
         - name: csi-de-plugin
-          image: delphix/delphix-csi:v0.0.1
+          image: delphix/delphix-csi:v0.0.2
           args :           
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--password=$(DELPHIX_ACCESS_PASSWORD)"

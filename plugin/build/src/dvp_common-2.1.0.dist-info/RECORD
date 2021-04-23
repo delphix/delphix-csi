@@ -1,0 +1,17 @@
+dlpx/__init__.py,sha256=XsCSosO2MME3GlNHah0qMZqN0ziU_USPfqifNsPPol8,124
+dlpx/__init__.pyc,,
+dlpx/virtualization/__init__.py,sha256=XsCSosO2MME3GlNHah0qMZqN0ziU_USPfqifNsPPol8,124
+dlpx/virtualization/__init__.pyc,,
+dlpx/virtualization/common/__init__.py,sha256=nw1wkCi57olV8eviBQYephk6uupD3k3T7DIA6ifPtRs,182
+dlpx/virtualization/common/__init__.pyc,,
+dlpx/virtualization/common/_common_classes.py,sha256=6d486ENpI8D7vFfm1QgOmo7OkqdcOGroaaqooflq9fk,9277
+dlpx/virtualization/common/_common_classes.pyc,,
+dlpx/virtualization/common/exceptions.py,sha256=0U_DqyGnQHFjx0k2pkNsH-Q4NH-CAvBtAgUE4GgBO0w,7122
+dlpx/virtualization/common/exceptions.pyc,,
+dvp_common-2.1.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+dvp_common-2.1.0.dist-info/LICENSE,sha256=z8d0m5b2O9McPEK1xHG_dWgUBT6EfBDz6wA0F7xSPTA,11358
+dvp_common-2.1.0.dist-info/METADATA,sha256=yI6Sk592Ms-Iz_sH1gywd4bT-54JZEJBMG50ixE5Ivc,1082
+dvp_common-2.1.0.dist-info/RECORD,,
+dvp_common-2.1.0.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+dvp_common-2.1.0.dist-info/WHEEL,sha256=CbUdLTqD3-4zWemf83rgR_2_MC4TeXw9qXwrXte5w4w,92
+dvp_common-2.1.0.dist-info/top_level.txt,sha256=DHV0Y6ey7Lf4xGizuzm03Sn2Gb0yukm-th9ZG238il4,5

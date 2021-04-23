@@ -1,10 +1,11 @@
 id: 8c5b6678-f6bb-4e63-bc2f-66f3f108bc26
 name: delphix-csi-plugin
-version: 0.1.0
+buildNumber: 0.2.0 
 language: PYTHON27
 hostTypes:
 - UNIX
 pluginType: DIRECT
 entryPoint: plugin_runner:plugin
+rootSquashEnabled: false
 srcDir: src
 schemaFile: schema.json

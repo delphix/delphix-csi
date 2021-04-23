@@ -43,10 +43,6 @@ definitions:
         type: "string"
         description: "Kubernetes PV/PVC Namespace"
         default: ""
-      create_volume:
-        type: "string"
-        description: "Create Volume in Kubernetes?"
-        default: "N"
       persistent_volume:
         type: "string"
         description: "Kubernetes Persistent Volume Name"

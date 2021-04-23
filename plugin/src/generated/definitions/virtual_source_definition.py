@@ -14,7 +14,7 @@ class VirtualSourceDefinition(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, mount_location=None, persistent_volume_claim='', namespace='', create_volume='N', persistent_volume='', validate=True):
+    def __init__(self, mount_location=None, persistent_volume_claim='', namespace='', persistent_volume='', validate=True):
         """VirtualSourceDefinition - a model defined in Swagger. The type of some of these
         attributes can be defined as a List[ERRORUNKNOWN]. This just means they
         are a list of any type.
@@ -25,8 +25,6 @@ class VirtualSourceDefinition(Model):
             :type persistent_volume_claim: str
             :param namespace: The namespace of this VirtualSourceDefinition.
             :type namespace: str
-            :param create_volume: The create_volume of this VirtualSourceDefinition.
-            :type create_volume: str
             :param persistent_volume: The persistent_volume of this VirtualSourceDefinition.
             :type persistent_volume: str
             :param validate: If the validation should be done during init. This
@@ -37,7 +35,6 @@ class VirtualSourceDefinition(Model):
             'mount_location': str,
             'persistent_volume_claim': str,
             'namespace': str,
-            'create_volume': str,
             'persistent_volume': str
         }
 
@@ -45,7 +42,6 @@ class VirtualSourceDefinition(Model):
             'mount_location': 'mount_location',
             'persistent_volume_claim': 'persistent_volume_claim',
             'namespace': 'namespace',
-            'create_volume': 'create_volume',
             'persistent_volume': 'persistent_volume'
         }
         
@@ -78,16 +74,6 @@ class VirtualSourceDefinition(Model):
         if validate and type_error:
             raise type_error
         self._namespace = namespace
-
-        # Validating the attribute create_volume and then saving it.
-        type_error = GeneratedClassesTypeError.type_error(VirtualSourceDefinition,
-                                                          'create_volume',
-                                                          create_volume,
-                                                          str,
-                                                          False)
-        if validate and type_error:
-            raise type_error
-        self._create_volume = create_volume
 
         # Validating the attribute persistent_volume and then saving it.
         type_error = GeneratedClassesTypeError.type_error(VirtualSourceDefinition,
@@ -198,36 +184,6 @@ class VirtualSourceDefinition(Model):
         if type_error:
             raise type_error
         self._namespace = namespace
-
-    @property
-    def create_volume(self):
-        """Gets the create_volume of this VirtualSourceDefinition.
-
-        Create Volume in Kubernetes?
-
-        :return: The create_volume of this VirtualSourceDefinition.
-        :rtype: str
-        """
-        return self._create_volume
-
-    @create_volume.setter
-    def create_volume(self, create_volume):
-        """Sets the create_volume of this VirtualSourceDefinition.
-
-        Create Volume in Kubernetes?
-
-        :param create_volume: The create_volume of this VirtualSourceDefinition.
-        :type create_volume: str
-        """
-        # Validating the attribute create_volume and then saving it.
-        type_error = GeneratedClassesTypeError.type_error(VirtualSourceDefinition,
-                                                          'create_volume',
-                                                          create_volume,
-                                                          str,
-                                                          False)
-        if type_error:
-            raise type_error
-        self._create_volume = create_volume
 
     @property
     def persistent_volume(self):

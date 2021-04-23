@@ -101,15 +101,9 @@
                 "default": "",
                 "prettyName": "Kubernetes Namespace",
                 "description": "Kubernetes PV/PVC Namespace"
-            },
-            "create_volume": {
-                "type": "string",
-                "default": "N",
-                "prettyName": "Create PV in Kubernetes",
-                "description": "Create Volume in Kubernetes?"
             }
         },
-        "ordering": ["mount_location", "persistent_volume_claim", "persistent_volume"]
+        "ordering": ["mount_location", "namespace", "persistent_volume_claim" ]
     },
     "linkedSourceDefinition": {
         "type": "object",

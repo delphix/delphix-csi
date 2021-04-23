@@ -33,7 +33,7 @@ This will build a cluster running the latest version of Kubernetes, with all the
 Deploy the K8S Python Plugin to the Engine.
 ```
 cd plugin
-dvp build && dvp upload -e 172.16.251.252 -u admin --password delphix
+dvp build && dvp upload -e 172.168.26.9 -u admin --password delphix
 ```
 
 ### Add k8s-master Environment to Delphix
