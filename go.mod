@@ -10,8 +10,8 @@ require (
 	github.com/golang/protobuf v1.4.2
 	github.com/kubernetes-csi/csi-lib-utils v0.7.0
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
-	golang.org/x/net v0.0.0-20201006153459-a7d1128ccaa0
-	golang.org/x/text v0.3.3 // indirect
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+	golang.org/x/text v0.3.8 // indirect
 	google.golang.org/genproto v0.0.0-20200707001353-8e8330bf89df // indirect
 	google.golang.org/grpc v1.30.0
 	google.golang.org/protobuf v1.25.0 // indirect
