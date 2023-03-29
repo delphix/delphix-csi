@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: csi-deployment-pvc
+  name: csi-demo-source-pvc
 spec:
   accessModes:
   - ReadWriteOnce
@@ -13,7 +13,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx 
+  name: busybox 
 spec:
   containers:
   - image: busybox
@@ -22,14 +22,11 @@ spec:
         runAsUser: 1001
     command:  ["sleep", "600"]
     imagePullPolicy: Always
-    name: nginx
-    ports:
-    - containerPort: 80
-      protocol: TCP
+    name: busybox
     volumeMounts:
-      - mountPath: /var/www
-        name: csi-deployment-pvc
+      - mountPath: /var/data
+        name: csi-demo-volume
   volumes:
-  - name: csi-deployment-pvc
+  - name: csi-demo-volume
     persistentVolumeClaim:
-      claimName: csi-deployment-pvc
+      claimName: csi-demo-source-pvc

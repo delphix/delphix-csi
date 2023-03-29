@@ -1,8 +1,9 @@
-#!/usr/bin/env bash
+#! /bin/sh
 # @author: Daniel Stolf <daniel.stolf@delphix.com> - 02/2020
 # Changelog:
+# 29/03/2023 - change default shell to /bin/sh
 ###
-
+shopt -s expand_aliases
 [ -f ~/.bashrc ] && source ~/.bashrc
 [ -f ~/.bash_profile ] && source ~/.bash_profile
 
