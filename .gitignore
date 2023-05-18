@@ -3,3 +3,5 @@
 /hack/.vagrant
 /hack/kubernetes-setup/join-command
 /hack/kubernetes-setup/kubeconfig
+plugin/build/src/generated/*
+*.pyc

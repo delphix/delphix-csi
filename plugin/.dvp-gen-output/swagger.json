@@ -8,8 +8,22 @@
   "definitions": {
     "linkedSourceDefinition": {
       "additionalProperties": false, 
+      "ordering": [
+        "mount_location"
+      ], 
+      "required": [
+        "mount_location"
+      ], 
       "type": "object", 
-      "properties": {}
+      "properties": {
+        "mount_location": {
+          "default": "", 
+          "prettyName": "Mount Location on staging Host", 
+          "type": "string", 
+          "description": "Where to mount the dsource onto the staging host", 
+          "format": "unixpath"
+        }
+      }
     }, 
     "sourceConfigDefinition": {
       "required": [
@@ -34,17 +48,24 @@
           "type": "string", 
           "description": "Kubernetes Persistent Volume Claim Name"
         }, 
+        "export_path": {
+          "default": "", 
+          "prettyName": "Export Path on Delphix Engine", 
+          "type": "string", 
+          "description": "Export Path on Delphix Engine (DO NOT FILL THIS)"
+        }, 
         "name": {
           "default": "", 
           "prettyName": "Unique Identifier for Source", 
           "type": "string", 
           "description": "Delphix Unique Identifier for the Source"
         }, 
-        "export_path": {
+        "mount_location": {
           "default": "", 
-          "prettyName": "Export Path on Delphix Engine", 
+          "prettyName": "Mount Location on Target Host", 
           "type": "string", 
-          "description": "Export Path on Delphix Engine (DO NOT FILL THIS)"
+          "description": "Where to mount VDB onto the target host", 
+          "format": "unixpath"
         }
       }
     }, 
@@ -58,6 +79,7 @@
       "type": "object", 
       "properties": {
         "mount_location": {
+          "default": "", 
           "prettyName": "Mount Location on Target Host", 
           "type": "string", 
           "description": "Where to mount VDB onto the target host", 

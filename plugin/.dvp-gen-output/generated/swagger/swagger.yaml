@@ -7,6 +7,14 @@ paths: {}
 definitions:
   linkedSourceDefinition:
     type: "object"
+    required:
+    - "mount_location"
+    properties:
+      mount_location:
+        type: "string"
+        format: "unixpath"
+        description: "Where to mount the dsource onto the staging host"
+        default: ""
   sourceConfigDefinition:
     type: "object"
     required:
@@ -20,13 +28,18 @@ definitions:
         type: "string"
         description: "Kubernetes Persistent Volume Claim Name"
         default: ""
+      export_path:
+        type: "string"
+        description: "Export Path on Delphix Engine (DO NOT FILL THIS)"
+        default: ""
       name:
         type: "string"
         description: "Delphix Unique Identifier for the Source"
         default: ""
-      export_path:
+      mount_location:
         type: "string"
-        description: "Export Path on Delphix Engine (DO NOT FILL THIS)"
+        format: "unixpath"
+        description: "Where to mount VDB onto the target host"
         default: ""
   virtualSourceDefinition:
     type: "object"
@@ -35,6 +48,7 @@ definitions:
         type: "string"
         format: "unixpath"
         description: "Where to mount VDB onto the target host"
+        default: ""
       persistent_volume_claim:
         type: "string"
         description: "Kubernetes Persistent Volume Claim Name"

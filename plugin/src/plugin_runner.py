@@ -39,7 +39,14 @@ def repository_discovery(source_connection):
         RepositoryDefinition.version = result.stdout.split("|")[5]
         RepositoryName = "Kubernetes - {} - {}".format( RepositoryDefinition.context, RepositoryDefinition.version)
     else:
-        return []
+        RepositoryDefinition.kubectl = ""
+        RepositoryDefinition.context = ""
+        RepositoryDefinition.cluster = ""
+        RepositoryDefinition.username = ""
+        RepositoryDefinition.apiendpoint = ""
+        RepositoryDefinition.version = ""
+        RepositoryName = "Empty vFile Repository"
+
     return [RepositoryDefinition(name=RepositoryName)]
 
 @plugin.discovery.source_config()
@@ -52,8 +59,20 @@ def source_config_discovery(source_connection, repository):
     return [SourceConfigDefinition(name = "Empty CSI Volume (clone this for empty volumes)")]
 
 
+# Creates an empty mount when dSource is added to Delphix.
+@plugin.linked.mount_specification()
+def linked_mount_specification(staged_source, repository):
+    try:
+        mount_path=staged_source.parameters.mount_location
+        environment = staged_source.staged_connection.environment
+        mounts = [Mount(environment, mount_path)]
+    except Exception as err:
+        raise
+    return MountSpecification(mounts)
+
+
 @plugin.linked.post_snapshot()
-def linked_post_snapshot(direct_source, repository, source_config):
+def linked_post_snapshot(staged_source, repository, source_config, snapshot_parameters):
     return SnapshotDefinition()
 
 
@@ -106,6 +125,13 @@ def reconfigure(virtual_source, repository, source_config, snapshot):
 
 @plugin.virtual.post_snapshot()
 def virtual_post_snapshot(virtual_source, repository, source_config):
+    mount_path = "{}/{}".format(virtual_source.parameters.mount_location,virtual_source.guid)
+    environmentvars = {
+        "MOUNTPATH": mount_path
+    }
+    script_content = pkgutil.get_data('resources', 'deleteVDBMount.sh')
+    result = libs.run_bash(virtual_source.connection, script_content, environmentvars)
+
     return SnapshotDefinition()
 
 

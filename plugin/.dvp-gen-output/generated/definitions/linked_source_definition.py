@@ -14,21 +14,37 @@ class LinkedSourceDefinition(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, validate=True):
+    def __init__(self, mount_location='', validate=True):
         """LinkedSourceDefinition - a model defined in Swagger. The type of some of these
         attributes can be defined as a List[ERRORUNKNOWN]. This just means they
         are a list of any type.
 
+            :param mount_location: The mount_location of this LinkedSourceDefinition.
+            :type mount_location: str
             :param validate: If the validation should be done during init. This
             should only be called internally when calling from_dict.
             :type validate: bool
         """
         self.swagger_types = {
+            'mount_location': str
         }
 
         self.attribute_map = {
+            'mount_location': 'mount_location'
         }
         
+        # Validating the attribute mount_location and then saving it.
+        if validate and mount_location is None:
+            raise GeneratedClassesError(
+                "The required parameter 'mount_location' must not be 'None'.")
+        type_error = GeneratedClassesTypeError.type_error(LinkedSourceDefinition,
+                                                          'mount_location',
+                                                          mount_location,
+                                                          str,
+                                                          True)
+        if validate and type_error:
+            raise type_error
+        self._mount_location = mount_location
     @classmethod
     def from_dict(cls, dikt):
         """Returns the dict as a model
@@ -39,3 +55,36 @@ class LinkedSourceDefinition(Model):
         :rtype: LinkedSourceDefinition
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def mount_location(self):
+        """Gets the mount_location of this LinkedSourceDefinition.
+
+        Where to mount the dsource onto the staging host
+
+        :return: The mount_location of this LinkedSourceDefinition.
+        :rtype: str
+        """
+        return self._mount_location
+
+    @mount_location.setter
+    def mount_location(self, mount_location):
+        """Sets the mount_location of this LinkedSourceDefinition.
+
+        Where to mount the dsource onto the staging host
+
+        :param mount_location: The mount_location of this LinkedSourceDefinition.
+        :type mount_location: str
+        """
+        # Validating the attribute mount_location and then saving it.
+        if mount_location is None:
+            raise GeneratedClassesError(
+                "The required parameter 'mount_location' must not be 'None'.")
+        type_error = GeneratedClassesTypeError.type_error(LinkedSourceDefinition,
+                                                          'mount_location',
+                                                          mount_location,
+                                                          str,
+                                                          True)
+        if type_error:
+            raise type_error
+        self._mount_location = mount_location
