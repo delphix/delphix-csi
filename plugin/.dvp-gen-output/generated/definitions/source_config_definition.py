@@ -14,7 +14,7 @@ class SourceConfigDefinition(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, persistent_volume='', persistent_volume_claim='', name='', export_path='', validate=True):
+    def __init__(self, persistent_volume='', persistent_volume_claim='', export_path='', name='', mount_location='', validate=True):
         """SourceConfigDefinition - a model defined in Swagger. The type of some of these
         attributes can be defined as a List[ERRORUNKNOWN]. This just means they
         are a list of any type.
@@ -23,10 +23,12 @@ class SourceConfigDefinition(Model):
             :type persistent_volume: str
             :param persistent_volume_claim: The persistent_volume_claim of this SourceConfigDefinition.
             :type persistent_volume_claim: str
-            :param name: The name of this SourceConfigDefinition.
-            :type name: str
             :param export_path: The export_path of this SourceConfigDefinition.
             :type export_path: str
+            :param name: The name of this SourceConfigDefinition.
+            :type name: str
+            :param mount_location: The mount_location of this SourceConfigDefinition.
+            :type mount_location: str
             :param validate: If the validation should be done during init. This
             should only be called internally when calling from_dict.
             :type validate: bool
@@ -34,15 +36,17 @@ class SourceConfigDefinition(Model):
         self.swagger_types = {
             'persistent_volume': str,
             'persistent_volume_claim': str,
+            'export_path': str,
             'name': str,
-            'export_path': str
+            'mount_location': str
         }
 
         self.attribute_map = {
             'persistent_volume': 'persistent_volume',
             'persistent_volume_claim': 'persistent_volume_claim',
+            'export_path': 'export_path',
             'name': 'name',
-            'export_path': 'export_path'
+            'mount_location': 'mount_location'
         }
         
         # Validating the attribute persistent_volume and then saving it.
@@ -65,6 +69,16 @@ class SourceConfigDefinition(Model):
             raise type_error
         self._persistent_volume_claim = persistent_volume_claim
 
+        # Validating the attribute export_path and then saving it.
+        type_error = GeneratedClassesTypeError.type_error(SourceConfigDefinition,
+                                                          'export_path',
+                                                          export_path,
+                                                          str,
+                                                          False)
+        if validate and type_error:
+            raise type_error
+        self._export_path = export_path
+
         # Validating the attribute name and then saving it.
         if validate and name is None:
             raise GeneratedClassesError(
@@ -78,15 +92,15 @@ class SourceConfigDefinition(Model):
             raise type_error
         self._name = name
 
-        # Validating the attribute export_path and then saving it.
+        # Validating the attribute mount_location and then saving it.
         type_error = GeneratedClassesTypeError.type_error(SourceConfigDefinition,
-                                                          'export_path',
-                                                          export_path,
+                                                          'mount_location',
+                                                          mount_location,
                                                           str,
                                                           False)
         if validate and type_error:
             raise type_error
-        self._export_path = export_path
+        self._mount_location = mount_location
     @classmethod
     def from_dict(cls, dikt):
         """Returns the dict as a model
@@ -159,6 +173,36 @@ class SourceConfigDefinition(Model):
         self._persistent_volume_claim = persistent_volume_claim
 
     @property
+    def export_path(self):
+        """Gets the export_path of this SourceConfigDefinition.
+
+        Export Path on Delphix Engine (DO NOT FILL THIS)
+
+        :return: The export_path of this SourceConfigDefinition.
+        :rtype: str
+        """
+        return self._export_path
+
+    @export_path.setter
+    def export_path(self, export_path):
+        """Sets the export_path of this SourceConfigDefinition.
+
+        Export Path on Delphix Engine (DO NOT FILL THIS)
+
+        :param export_path: The export_path of this SourceConfigDefinition.
+        :type export_path: str
+        """
+        # Validating the attribute export_path and then saving it.
+        type_error = GeneratedClassesTypeError.type_error(SourceConfigDefinition,
+                                                          'export_path',
+                                                          export_path,
+                                                          str,
+                                                          False)
+        if type_error:
+            raise type_error
+        self._export_path = export_path
+
+    @property
     def name(self):
         """Gets the name of this SourceConfigDefinition.
 
@@ -192,31 +236,31 @@ class SourceConfigDefinition(Model):
         self._name = name
 
     @property
-    def export_path(self):
-        """Gets the export_path of this SourceConfigDefinition.
+    def mount_location(self):
+        """Gets the mount_location of this SourceConfigDefinition.
 
-        Export Path on Delphix Engine (DO NOT FILL THIS)
+        Where to mount VDB onto the target host
 
-        :return: The export_path of this SourceConfigDefinition.
+        :return: The mount_location of this SourceConfigDefinition.
         :rtype: str
         """
-        return self._export_path
+        return self._mount_location
 
-    @export_path.setter
-    def export_path(self, export_path):
-        """Sets the export_path of this SourceConfigDefinition.
+    @mount_location.setter
+    def mount_location(self, mount_location):
+        """Sets the mount_location of this SourceConfigDefinition.
 
-        Export Path on Delphix Engine (DO NOT FILL THIS)
+        Where to mount VDB onto the target host
 
-        :param export_path: The export_path of this SourceConfigDefinition.
-        :type export_path: str
+        :param mount_location: The mount_location of this SourceConfigDefinition.
+        :type mount_location: str
         """
-        # Validating the attribute export_path and then saving it.
+        # Validating the attribute mount_location and then saving it.
         type_error = GeneratedClassesTypeError.type_error(SourceConfigDefinition,
-                                                          'export_path',
-                                                          export_path,
+                                                          'mount_location',
+                                                          mount_location,
                                                           str,
                                                           False)
         if type_error:
             raise type_error
-        self._export_path = export_path
+        self._mount_location = mount_location

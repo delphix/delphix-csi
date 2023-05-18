@@ -69,6 +69,13 @@
                 "default": "",
                 "prettyName": "Kubernetes PVC Name",
                 "description": "Kubernetes Persistent Volume Claim Name"
+            },
+            "mount_location": {
+                "type": "string",
+                "format": "unixpath",
+                "default": "",
+                "prettyName": "Mount Location on Target Host",
+                "description": "Where to mount VDB onto the target host"
             }
         },
         "nameField": "name",
@@ -81,6 +88,7 @@
             "mount_location": {
                 "type": "string",
                 "format": "unixpath",
+                "default": "",
                 "prettyName": "Mount Location on Target Host",
                 "description": "Where to mount VDB onto the target host"
             },
@@ -108,7 +116,17 @@
     "linkedSourceDefinition": {
         "type": "object",
         "additionalProperties" : false,
-        "properties" : {}
+        "required": ["mount_location"],
+        "properties" : {
+            "mount_location": {
+                "type": "string",
+                "format": "unixpath",
+                "default": "",
+                "prettyName": "Mount Location on staging Host",
+                "description": "Where to mount the dsource onto the staging host"
+            }
+        },
+        "ordering": ["mount_location"]
     },
     "snapshotDefinition": {
         "type" : "object",

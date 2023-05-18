@@ -14,7 +14,7 @@ class VirtualSourceDefinition(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, mount_location=None, persistent_volume_claim='', namespace='', persistent_volume='', validate=True):
+    def __init__(self, mount_location='', persistent_volume_claim='', namespace='', persistent_volume='', validate=True):
         """VirtualSourceDefinition - a model defined in Swagger. The type of some of these
         attributes can be defined as a List[ERRORUNKNOWN]. This just means they
         are a list of any type.
